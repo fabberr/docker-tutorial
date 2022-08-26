@@ -36,17 +36,22 @@ A tool for packaging and distributing software along with all its dependencies. 
 
 * `docker build [-t <tag>] <dockerfile_root>`
 
-#### Run Image (spawn container)
+#### Run Image (spawn and start container)
 
 * `docker run -d [-p <host_port>:<container_port>] <tag>`
 
 #### List Containers
 
 * `docker ps`
+* `docker ps -a` (include stopped containers)
 
 #### Stop Running Containers
 
 * `docker stop <container_id>`
+
+#### Restart Stopped Container
+
+* `docker start <container_id>`
 
 #### Remove Container
 
@@ -56,16 +61,16 @@ A tool for packaging and distributing software along with all its dependencies. 
 #### Execute in Container's shell
 
 * `docker exec <container_id> <cmd> [args]`
-* `docker exec -it <container_id> <shell_executable>` (open interactive TTY session using specified shell)
+* `docker exec -it <container_id> <shell_executable>` (open interactive TTY session in container using specified shell)
 
 #### Show Container Logs
 
-* `docker logs <container_id>`
+* `docker logs <container_id>` (dump logs to stdout)
 * `docker logs -f <container_id> (follow log updates)`
 
 ## Dev Workflow
 
-1. Build image:  
+1. Build initial image:
 
     ```
     docker build -t <tag> <dockerfile_root>
@@ -83,10 +88,10 @@ A tool for packaging and distributing software along with all its dependencies. 
     sh -c <install_dependencies_and_build_tools_cmds>
     ```
     
-3. Rebuild image (when done for the day):
+3. Rebuild image:
     
     ```
-    docker stop <container_id>
+    docker rm -f <container_id>
     ```
     ```
     docker build -t <tag> <dockerfile_root>
